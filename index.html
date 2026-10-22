@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basit QR Kod Oluşturucu</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-5 0h2v3h-2v-3zm2 3h3v2h-3v-2zm2 2h3v3h-3v-3zm-4 1h2v2h-2v-2z'/></svg>">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-5 0h2v3h-2v-3zm2 3h3v2h-3v-2zm2 2h3v3h-3v-3zm-4 1h2v2h-2v-2z"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Basit QR Kod Oluşturucu</h1>
+        <p class="subtitle">Bağlantınızı girin, anında QR koda dönüştürün ve tek tıkla indirin.</p>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="main-grid">
+      <!-- Input & Controls Section -->
+      <section class="card controls-card">
+        <div class="card-header">
+          <h2>1. Bağlantınızı Girin</h2>
+        </div>
+
+        <div class="form-group">
+          <label for="urlInput">Web Sitesi Bağlantısı (URL) veya Metin:</label>
+          <div class="input-wrapper">
+            <textarea 
+              id="urlInput" 
+              rows="3" 
+              placeholder="https://ornek.com veya herhangi bir metin girin..."
+              spellcheck="false"
+            ></textarea>
+            <button id="clearBtn" class="clear-icon-btn" title="Temizle" style="display: none;">&times;</button>
+          </div>
+          <div class="input-actions">
+            <button id="pasteBtn" class="btn btn-ghost btn-sm" type="button">
+              📋 Yapıştır
+            </button>
+            <button id="exampleBtn" class="btn btn-ghost btn-sm" type="button">
+              💡 Örnek Bağlantı
+            </button>
+          </div>
+        </div>
+
+        <!-- Customization Toggle / Accordion -->
+        <details class="customization-accordion" open>
+          <summary class="accordion-summary">
+            <span>⚙️ Özelleştirme Seçenekleri (İsteğe Bağlı)</span>
+            <span class="chevron">▼</span>
+          </summary>
+          <div class="accordion-content">
+            <!-- Renkler -->
+            <div class="form-row">
+              <div class="form-group half">
+                <label for="fgColor">QR Rengi:</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="fgColor" value="#0f172a">
+                  <span id="fgColorText" class="color-hex">#0f172a</span>
+                </div>
+              </div>
+              <div class="form-group half">
+                <label for="bgColor">Arka Plan Rengi:</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="bgColor" value="#ffffff">
+                  <span id="bgColorText" class="color-hex">#ffffff</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hızlı Renk Temaları -->
+            <div class="preset-colors">
+              <span class="preset-label">Temalar:</span>
+              <button type="button" class="preset-btn active" data-fg="#0f172a" data-bg="#ffffff" title="Klasik">Klasik</button>
+              <button type="button" class="preset-btn" data-fg="#1e40af" data-bg="#f0fdf4" title="Mavi / Açık Yeşil">Okyanus</button>
+              <button type="button" class="preset-btn" data-fg="#701a75" data-bg="#fdf4ff" title="Mor">Viyole</button>
+              <button type="button" class="preset-btn" data-fg="#14532d" data-bg="#f0fdf4" title="Zümrüt">Zümrüt</button>
+            </div>
+
+            <!-- Boyut -->
+            <div class="form-group">
+              <label for="sizeSelect">Görüntü Boyutu / Kalitesi:</label>
+              <select id="sizeSelect" class="select-control">
+                <option value="256">256 × 256 px (Küçük / Web)</option>
+                <option value="512" selected>512 × 512 px (Önerilen / HD)</option>
+                <option value="1024">1024 × 1024 px (Ultra HD / Baskı)</option>
+              </select>
+            </div>
+
+            <!-- Logo Yükleme -->
+            <div class="form-group">
+              <label>Merkeze Logo Ekle (İsteğe Bağlı):</label>
+              <div class="logo-upload-container">
+                <label for="logoInput" class="logo-upload-label">
+                  <span id="logoUploadText">📁 Logo Resmi Seç (PNG/JPG)</span>
+                </label>
+                <input type="file" id="logoInput" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="display: none;">
+                <button type="button" id="removeLogoBtn" class="btn btn-sm btn-danger" style="display: none;">Logo Kaldır</button>
+              </div>
+              <small class="help-text">Logo eklendiğinde QR kodun kolay okunması için yüksek hata düzeltme seviyesi kullanılır.</small>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Output / Preview Section -->
+      <section class="card preview-card">
+        <div class="card-header">
+          <h2>2. Önizleme ve İndirme</h2>
+        </div>
+
+        <div class="preview-box">
+          <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="spinner"></div>
+            <span>QR Kod Hazırlanıyor...</span>
+          </div>
+
+          <div id="emptyState" class="empty-state" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            <p>QR kodu oluşturmak için sol tarafa bir bağlantı veya metin girin.</p>
+          </div>
+
+          <!-- Canvas for drawing QR code -->
+          <div class="canvas-container">
+            <canvas id="qrCanvas" width="512" height="512"></canvas>
+          </div>
+        </div>
+
+        <!-- Download & Actions -->
+        <div class="actions-wrapper">
+          <button id="downloadBtn" class="btn btn-primary btn-lg" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>QR Kodu İndir (PNG)</span>
+          </button>
+
+          <button id="copyBtn" class="btn btn-secondary" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Panoya Kopyala</span>
+          </button>
+        </div>
+
+        <div class="footer-note">
+          <span>🔒 Tamamen güvenli: QR kodunuz tarayıcınızda işlenir.</span>
+        </div>
+      </section>
+    </main>
+
+    <!-- App Footer / Credit -->
+    <footer class="app-footer">
+      <div class="footer-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span>Bu yazılım <strong>Ordu Üniversitesi Teknofest Kulübü</strong> tarafından hazırlanmıştır.</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Hidden container for QRCode.js internal rendering -->
+  <div id="hiddenQrHelper" style="display: none;"></div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
